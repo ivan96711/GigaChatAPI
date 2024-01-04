@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>$(AssemblyName)</Title>
+    <Authors>ivan96711</Authors>
+    <PackageProjectUrl>https://github.com/ivan96711/GigaChatAPI</PackageProjectUrl>
+    <PackageId>GigaChatAPI</PackageId>
+    <Description>Неофициальная библиотека для работы с GigaChat API</Description>
+    <RepositoryUrl>https://github.com/ivan96711/GigaChatAPI</RepositoryUrl>
+    <PackageTags>GigaChat; Sber</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>
