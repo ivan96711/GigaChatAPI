@@ -8,7 +8,7 @@ namespace GigaChatSimpleExample
     {
         static string AuthData => throw new Exception("Вставь сюда авторизационные данные. Подробнее https://developers.sber.ru/docs/ru/gigachat/api/integration");
         
-        static void Main(string[] args)
+        static void Main()
         {
             var gigaChat = new GigaChat(Scope.GIGACHAT_API_PERS, AuthData);
             ShowAllModels(gigaChat).Wait();

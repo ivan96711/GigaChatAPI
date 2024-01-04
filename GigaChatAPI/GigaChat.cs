@@ -1,5 +1,6 @@
 ﻿using GigaChatAPI.Interfaces;
 using GigaChatAPI.Models;
+using Newtonsoft.Json.Linq;
 
 namespace GigaChatAPI
 {
@@ -13,7 +14,6 @@ namespace GigaChatAPI
         readonly string authData;
         readonly Scope scope;
         readonly Guid rquid;
-
         readonly DateTime unixEpoch;
 
         public Guid RqUID => rquid;
@@ -50,7 +50,7 @@ namespace GigaChatAPI
                 }));
         }
 
-        public async Task<IEnumerable<Model>> GetModelsAsync()
+        public async Task<IEnumerable<Model>> GetModelsAsync(CancellationToken? token = null)
         {
             if (!IsAuthorized)
                 await AuthorizeAsync();
@@ -61,12 +61,13 @@ namespace GigaChatAPI
                 headers: new[]
                 {
                     ("Authorization", $"Bearer {Token!.AccessToken}")
-                }));
+                },
+                canceletionToken: token));
 
             return result.Data;
         }
 
-        public async Task<Model> GetModelAsync(string modelName)
+        public async Task<Model> GetModelAsync(string modelName, CancellationToken? token = null)
         {
             if (!IsAuthorized)
                 await AuthorizeAsync();
@@ -77,12 +78,13 @@ namespace GigaChatAPI
                 headers: new[]
                 {
                     ("Authorization", $"Bearer {Token!.AccessToken}")
-                }));
+                },
+                canceletionToken: token));
 
             return result;
         }
 
-        public async Task<ResponseQuery> SendMessage(ModelConfiguration data)
+        public async Task<ResponseQuery> SendMessage(ModelConfiguration data, CancellationToken? token = null)
         {
             if (!IsAuthorized)
                 await AuthorizeAsync();
@@ -93,12 +95,13 @@ namespace GigaChatAPI
                 headers: new[]
                 {
                     ("Authorization", $"Bearer {Token!.AccessToken}")
-                }));
+                },
+                canceletionToken: token));
 
             return result;
         }
 
-        public async Task<IEnumerable<TokenCountResponse>> GetTokensCount(TokenCountRequest data)
+        public async Task<IEnumerable<TokenCountResponse>> GetTokensCount(TokenCountRequest data, CancellationToken? token = null)
         {
             if (!IsAuthorized)
                 await AuthorizeAsync();
@@ -110,7 +113,8 @@ namespace GigaChatAPI
                 headers: new[]
                 {
                     ("Authorization", $"Bearer {Token!.AccessToken}")
-                }));
+                },
+                canceletionToken: token));
 
             return result;
         }

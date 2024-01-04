@@ -13,13 +13,15 @@ namespace GigaChatAPI
 
         public HttpWebClient()
         {
-            var handler = new HttpClientHandler();
-            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-            handler.ServerCertificateCustomValidationCallback =
+            var handler = new HttpClientHandler
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback =
                 (httpRequestMessage, cert, cetChain, policyErrors) =>
                 {
                     return true;
-                };
+                }
+            };
 
             _client = new HttpClient(handler);
 
@@ -67,26 +69,15 @@ namespace GigaChatAPI
         private async Task<string> GetResponseTextAsync(HttpResponseMessage response)
         {
             string text = await response.Content.ReadAsStringAsync();
-            switch (response.StatusCode)
+            return response.StatusCode switch
             {
-                case HttpStatusCode.OK:
-                case HttpStatusCode.Created:
-                    return text;
-                case HttpStatusCode.BadRequest:
-                    throw new BadRequestException(text);
-                case HttpStatusCode.Unauthorized:
-                    throw new UnauthorizedAccessException();
-                case HttpStatusCode.NotFound:
-                    throw new NoSuchModelException(text);
-                case HttpStatusCode.UnprocessableEntity:
-                    throw new ValidationException(text);
-                case HttpStatusCode.TooManyRequests:
-                    throw new TooManyRequestsException(text);
-                case HttpStatusCode.InternalServerError:
-                    throw new InternalServerErrorException(text);
-                default:
-                    throw new WebClientException(text);
-            }
+                HttpStatusCode.OK or HttpStatusCode.Created => text,
+                HttpStatusCode.BadRequest => throw new BadRequestException(text),
+                HttpStatusCode.Unauthorized => throw new UnauthorizedAccessException(),
+                HttpStatusCode.NotFound => throw new NoSuchModelException(text),
+                HttpStatusCode.InternalServerError => throw new InternalServerErrorException(text),
+                _ => throw new WebClientException(text),
+            };
         }
     }
 
@@ -105,16 +96,6 @@ namespace GigaChatAPI
     public class NoSuchModelException : WebClientException
     {
         public NoSuchModelException(string msg) : base(msg) { }
-    }
-
-    public class ValidationException : WebClientException
-    {
-        public ValidationException(string msg) : base(msg) { }
-    }
-
-    public class TooManyRequestsException : WebClientException
-    {
-        public TooManyRequestsException(string msg) : base(msg) { }
     }
 
     public class InternalServerErrorException : WebClientException
